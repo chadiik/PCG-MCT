@@ -1,9 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿#if FIREBASE
 using Firebase;
 using Firebase.Unity.Editor;
 using Firebase.Database;
+#else
+using FirebaseInterface;
+using FirebaseInterface.Database;
+#endif
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using System.Threading.Tasks;
 using System;
 
@@ -15,7 +21,9 @@ public class FirebaseManager : MonoBehaviour {
 
 			if ( m_Instance == null ) {
 
+				#if FIREBASE
 				m_Instance = GameObject.FindObjectOfType<FirebaseManager> ();
+#endif
 
 			}
 
@@ -35,7 +43,9 @@ public class FirebaseManager : MonoBehaviour {
 
 	protected void Start () {
 
+		#if FIREBASE
 		Init ();
+#endif
 
 	}
 

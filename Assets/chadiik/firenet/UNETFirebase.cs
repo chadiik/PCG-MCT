@@ -9,6 +9,7 @@ public class UNETFirebase : MonoBehaviour {
 
 	protected void Start () {
 
+		#if FIREBASE
 		if( !string.IsNullOrEmpty( MACFilter ) && MACFilter[0] != '!' ) {
 
 			isHost = 
@@ -17,6 +18,7 @@ public class UNETFirebase : MonoBehaviour {
 		}
 
 		Setup ( isHost );
+#endif
 
 	}
 

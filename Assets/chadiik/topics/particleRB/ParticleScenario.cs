@@ -1,4 +1,10 @@
-﻿using Firebase.Database;
+﻿#if FIREBASE
+using Firebase.Database;
+#else
+using FirebaseInterface;
+using FirebaseInterface.Database;
+#endif
+
 using pcg;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +21,7 @@ public class ParticleScenario : MonoBehaviour {
 
 		}
 
-		public static ParticleData FromSnapshot ( Firebase.Database.DataSnapshot snapshot ) {
+		public static ParticleData FromSnapshot ( DataSnapshot snapshot ) {
 
 			float x = float.Parse(snapshot.Child("x").Value.ToString()),
 				y = float.Parse(snapshot.Child("y").Value.ToString());
@@ -31,12 +37,16 @@ public class ParticleScenario : MonoBehaviour {
 
 	protected void Start () {
 
-		FirebaseManager.Instance.SetValueAsync ( "pcg/topic", "particles" );
-		FirebaseManager.Instance.Path ( "pcg/particles" ).ChildAdded += FB_OnParticleAdded;
+		if ( FirebaseManager.Instance != null ) {
+
+			FirebaseManager.Instance.SetValueAsync ( "pcg/topic", "particles" );
+			FirebaseManager.Instance.Path ( "pcg/particles" ).ChildAdded += FB_OnParticleAdded;
+
+		}
 
 	}
 
-	private void FB_OnParticleAdded ( object sender, Firebase.Database.ChildChangedEventArgs args ) {
+	private void FB_OnParticleAdded ( object sender, ChildChangedEventArgs args ) {
 
 		ParticleData particle = ParticleData.FromSnapshot(args.Snapshot);
 		Debug.Log ( args.Snapshot.Key + ":" + particle );
