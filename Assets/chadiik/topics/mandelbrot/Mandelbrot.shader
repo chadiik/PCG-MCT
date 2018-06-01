@@ -86,7 +86,7 @@
 				c = rotate(c, _Area.xy, _Angle);
 
 				float2 z = float2(3, 2) * (i.uv-.5) * _MJRatio;
-				float m = mandelbrot(z, c, 255, 2);
+				float m = mandelbrot(z, c, 32, 2);
 				
 				float2 mUV = float2(_YMul + m, .5);
 				fixed3 color = tex2D(_MainTex, mUV);
