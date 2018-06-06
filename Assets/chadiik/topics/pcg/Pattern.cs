@@ -6,7 +6,13 @@ public class Pattern : MonoBehaviour, IPattern {
 
 	public List<Vector3> vectors;
 
-	public bool m_Initiated = false;
+	public bool needsUpdate = true;
+
+	protected void Awake () {
+
+		needsUpdate = true;
+
+	}
 
 	public virtual void Init () {
 
@@ -20,11 +26,11 @@ public class Pattern : MonoBehaviour, IPattern {
 
 	public virtual IEnumerator<Vector3> GetEnumerator () {
 
-		if ( !m_Initiated ) {
+		if ( needsUpdate ) {
 
 			vectors = new List<Vector3> ();
 			Init ();
-			m_Initiated = true;
+			needsUpdate = false;
 
 		}
 

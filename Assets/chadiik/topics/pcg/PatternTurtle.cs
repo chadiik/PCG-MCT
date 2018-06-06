@@ -62,7 +62,6 @@ public class PatternTurtle : Pattern {
 	public void Draw ( List<LSSymbol> cmds ) {
 
 		Stack<Location> stack = new Stack<Location> ();
-		float lastX, lastY;
 
 		// start at grid 0,0 facing north with no color index
 		Location pos = new Location ( 0.0f, 0.0f, 90.0f, 0 );
@@ -76,7 +75,6 @@ public class PatternTurtle : Pattern {
 		Vector3 v3;
 
 		float rad;
-		float width;
 		Color color;
 		Color lastcolor = Color.black;
 		int len = cmds.Count;
@@ -153,9 +151,6 @@ public class PatternTurtle : Pattern {
 					log += " / Line ";
 #endif
 
-					lastX = pos.position.x;
-					lastY = pos.position.y;
-
 					// move the turtle
 					rad = pos.heading.eulerAngles.z * Mathf.PI / 180f;
 					pos.position.x += distance * Mathf.Cos ( rad );
@@ -228,7 +223,7 @@ public class PatternTurtle : Pattern {
 	private Transform preview;
 	private void Preview () {
 
-		m_Initiated = false;
+		needsUpdate = true;
 
 		if ( preview != null ) {
 
@@ -244,8 +239,6 @@ public class PatternTurtle : Pattern {
 	}
 
 	private IEnumerator PreviewCoroutine () {
-
-		float duration = Mathf.Min ( .1f, 3f / (float)vectors.Count );
 
 		foreach ( Vector3 v3 in this ) {
 

@@ -12,6 +12,12 @@ public class Rand : MonoBehaviour {
 
 	}
 
+	public static float Float ( float min, float max ) {
+
+		return min + Float () * ( max - min );
+
+	}
+
 	public static Vector3 Vector3 () {
 
 		float randX = Float(),
@@ -35,4 +41,5 @@ public class Rand : MonoBehaviour {
 		return v3;
 
 	}
+
 }

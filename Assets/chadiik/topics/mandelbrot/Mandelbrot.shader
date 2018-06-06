@@ -7,6 +7,7 @@
 		_Angle ("Angle", range(-3.1415, 3.1415)) = 0
 		_YMul ("YMul", float) = 2
 		_MJRatio ("MJRatio", float) = 0
+		_Iterations ("Iterations", float) = 255
 	}
 	SubShader
 	{
@@ -50,6 +51,7 @@
 			float _Angle;
 			float _YMul;
 			float _MJRatio;
+			float _Iterations;
 
 			float2 rotate(float2 p, float2 pivot, float a){
 				float s = sin(a);
@@ -86,7 +88,7 @@
 				c = rotate(c, _Area.xy, _Angle);
 
 				float2 z = float2(3, 2) * (i.uv-.5) * _MJRatio;
-				float m = mandelbrot(z, c, 32, 2);
+				float m = mandelbrot(z, c, _Iterations, 2);
 				
 				float2 mUV = float2(_YMul + m, .5);
 				fixed3 color = tex2D(_MainTex, mUV);
