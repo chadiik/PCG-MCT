@@ -14,8 +14,9 @@ MonoBehaviour:
   convCell: -1
   convAdj: 0.2
   convDiag: 0.05
-  aRate: 1
-  bRate: 0.45
-  feedRate: 0.043782912
-  killRate: 0.05872275
-  deltaTime: 1
+  aRate: 0.671513
+  bRate: 0.2855344
+  feedRate: 0.09116507
+  killRate: 0.058117196
+  deltaTime: 0.50415444
+  convolutionSum: 0.000000014901161

@@ -23,7 +23,6 @@ public class NSortableList : MonoBehaviour, INSortable {
 
 		if ( needsUpdate ) {
 
-			items = new List<INSortItem> ();
 			Init ();
 			needsUpdate = false;
 
@@ -33,8 +32,23 @@ public class NSortableList : MonoBehaviour, INSortable {
 		items.Sort ( new Comparison<INSortItem> ( sortFunction ) );
 
 	}
+
+	public static int SortRandom ( INSortItem a, INSortItem b ) {
+
+		return ( int )( Rand.Instance.Float () * 4f - 2f );
+
+	}
 	
-	public static int SortBySortingValue(INSortItem a, INSortItem b){
+	public static int SortBySortingValueInverted(INSortItem a, INSortItem b){
+
+		float d = a.SortingValue - b.SortingValue;
+		if ( d < 0 ) return 1;
+		if ( d > 0 ) return -1;
+		return 0;
+
+	}
+
+	public static int SortBySortingValue ( INSortItem a, INSortItem b ) {
 
 		float d = a.SortingValue - b.SortingValue;
 		if ( d < 0 ) return -1;
@@ -51,7 +65,6 @@ public class NSortableList : MonoBehaviour, INSortable {
 
 		if ( needsUpdate ) {
 
-			items = new List<INSortItem> ();
 			Init ();
 			needsUpdate = false;
 
@@ -68,6 +81,25 @@ public class NSortableList : MonoBehaviour, INSortable {
 	System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator () {
 
 		return GetEnumerator ();
+
+	}
+
+	public override string ToString () {
+
+		string result = "NSortableList(items = [";
+
+		for ( int i = 0, numItems = items.Count; i < numItems; i++ ) {
+
+			string name = items[i].name;
+			result += name.Substring ( 0, Mathf.Min ( name.Length, 6 ) ) + ( i < numItems - 1 ? ", " : "" );
+
+		}
+
+		result += "]";
+
+		result += ")";
+
+		return result;
 
 	}
 

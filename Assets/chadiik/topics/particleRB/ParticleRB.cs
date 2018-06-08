@@ -20,6 +20,8 @@ namespace pcg {
 
 		public Transform view;
 
+		public static Rand rand;
+
 		private float m_Age;
 
 		protected void Start () {
@@ -39,6 +41,12 @@ namespace pcg {
 			if ( life >= 0 ) {
 
 				StartCoroutine ( Kill ( life ) );
+
+			}
+
+			if ( rand == null ) {
+
+				rand = gameObject.AddComponent<Rand> ();
 
 			}
 
@@ -86,7 +94,7 @@ namespace pcg {
 
 			ParticleRB particle = value as ParticleRB;
 
-			Vector3 mForce = Rand.CircleVector3 () * particle.speed;
+			Vector3 mForce = rand.CircleVector3 () * particle.speed;
 
 			particle.rb.AddForce ( mForce, ForceMode.Force );
 

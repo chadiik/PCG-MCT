@@ -5,6 +5,7 @@ using UnityEngine;
 public interface INSortItem {
 
 	float SortingValue { get; }
+	string name { get; set; }
 
 }
 

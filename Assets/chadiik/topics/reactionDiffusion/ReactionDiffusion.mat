@@ -55,18 +55,18 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _A: 0.3666685
-    - _B: 0.26573068
+    - _A: 0.7592771
+    - _B: 0.15903963
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DT: 1
+    - _DT: 0.9
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Feed: 0.033473317
+    - _Feed: 0.107009515
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Kill: 0.05774245
+    - _Kill: 0.080280095
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1

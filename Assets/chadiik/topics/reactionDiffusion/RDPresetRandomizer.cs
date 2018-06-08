@@ -34,7 +34,7 @@ public class RDPresetRandomizer : ScriptableObject {
 
 		public void Fuzzy () {
 
-			this.value = Rand.Float ( min, max );
+			this.value = Rand.Instance.Float ( min, max );
 
 		}
 

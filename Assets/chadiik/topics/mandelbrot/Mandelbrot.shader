@@ -82,18 +82,42 @@
 				return iter / iterMax;
 			}
 
+			float mandelbrotSmooth(float2 z, float2 c, float iterMax, float limit){
+
+				float x = z.x;
+				float y = z.y;
+				limit *= limit;
+
+				float smooth;
+				float iter;
+				for(iter = 0; iter < iterMax; iter++){
+					x = z.x*z.x - z.y*z.y + c.x;
+					y = 2 * z.x*z.y + c.y;
+					if( x*x + y*y > limit ) break;
+					z.x = x;
+					z.y = y;
+					smooth += 1;
+				}
+
+				//return iter / iterMax;
+
+				smooth = smooth - log2(log2(dot(z,z))) + 4.0;
+
+				return smooth;
+			}
+
 			fixed4 frag (v2f i) : SV_Target
 			{
 				float2 c = _Area.xy + (i.uv-.5) * _Area.zw;
 				c = rotate(c, _Area.xy, _Angle);
 
 				float2 z = float2(3, 2) * (i.uv-.5) * _MJRatio;
-				float m = mandelbrot(z, c, _Iterations, 2);
+				float m = mandelbrotSmooth(z, c, _Iterations, 2);
 				
-				float2 mUV = float2(_YMul + m, .5);
+				float2 mUV = float2(_YMul + m, mandelbrotSmooth(z, c, _Iterations, 4));
 				fixed3 color = tex2D(_MainTex, mUV);
 
-				return fixed4(color, lerp(.001, 1, m));
+				return fixed4(color, 1);//lerp(.001, 1, m));
 			}
 			ENDCG
 		}

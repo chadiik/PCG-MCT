@@ -431,14 +431,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb98c0591363dae4c8963c32b289416f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parameters: {fileID: 11400000, guid: 2f903e083c03b684e98f23318dbbcf3a, type: 2}
-  updateRate: 32
+  _parameters: {fileID: 11400000, guid: 0812e8d2eceb1eb4fae04588dcf793c6, type: 2}
+  updateRate: 128
   material: {fileID: 2100000, guid: d8fe0701b03e9ed4cadb9e5cbba0c7c6, type: 2}
   texture: {fileID: 8600000, guid: e90d9b7a5d5c0c0488e0b3d451dd67ed, type: 2}
   needsUpdate: 1
   updateRegion: 0
   resetRegion: 0
-  randomizer: {fileID: 0}
+  randomizer: {fileID: 11400000, guid: 4c27161bcb28b2b4b86c886dfaf6a688, type: 2}
   randomize: 0
   feedKillData:
     dataString: 

@@ -31,13 +31,20 @@ public class MandlebrotExplorer : MonoBehaviour {
 	[Range ( 0, 1 )]
 	public float juliaMJRatio = 0;
 
+	[Header ( "Speeds" )]
+	public float timeSpeed = .05f;
 	public float scaleFactor = 1.01f;
 	public float rotateOffset = .03f;
+
+	public float smooth = .1f;
+
+	private Vector4 m_Area = new Vector4 ();
+	private float m_Angle = 0f;
 
 	private void UpdateValues () {
 
 		float t = Time.time;
-		yMul = 2 + Mathf.Cos ( t * .1f ) * .05f;
+		yMul = t * timeSpeed;
 
 	}
 
@@ -58,9 +65,11 @@ public class MandlebrotExplorer : MonoBehaviour {
 
 		}
 
-		Vector4 area = new Vector4 ( x, y, scaleX, scaleY );
-		material.SetVector ( "_Area", area );
-		material.SetFloat ( "_Angle", rotation );
+		//Vector4 area = new Vector4 ( x, y, scaleX, scaleY );
+		m_Area.Set ( Mathf.Lerp ( m_Area.x, x, smooth ), Mathf.Lerp ( m_Area.y, y, smooth ), Mathf.Lerp ( m_Area.z, scaleX, smooth ), Mathf.Lerp ( m_Area.w, scaleY, smooth ) );
+		m_Angle = Mathf.Lerp ( m_Angle, rotation, smooth );
+		material.SetVector ( "_Area", m_Area );
+		material.SetFloat ( "_Angle", m_Angle );
 		material.SetFloat ( "_YMul", yMul );
 
 	}
@@ -103,7 +112,7 @@ public class MandlebrotExplorer : MonoBehaviour {
 		);
 
 		Rotate ( ref mouseViewport, rotation );
-		Vector2 position = new Vector2(x, y) + mouseViewport * scale * .05f;
+		Vector2 position = new Vector2(x, y) + mouseViewport * scale * .03f;
 
 		Focus ( position.x, position.y );
 
@@ -149,6 +158,8 @@ public class MandlebrotExplorer : MonoBehaviour {
 			rotation += Mathf.Sign ( scroll ) * rotateOffset;
 
 		}
+
+
 
 	}
 

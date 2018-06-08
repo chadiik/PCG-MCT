@@ -23,6 +23,16 @@ public struct P3 : INSortItem {
 		}
 	}
 
+
+
+	public string name {
+		get {
+			return "P3";
+		}
+		set {
+			
+		}
+	}
 }
 
 public class NSortExample : NSortableList {

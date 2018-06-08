@@ -14,6 +14,8 @@ namespace pcg {
 		public float gravityPull = 1;
 		public AnimationCurve influence;
 
+		public Rand rand;
+
 		private float m_Strength;
 		private float m_CycleOffset;
 		private float m_BirthTime;
@@ -25,7 +27,7 @@ namespace pcg {
 			transform.localScale = new Vector3 ( s, s, s );
 
 			m_Strength = strength;
-			m_CycleOffset = Rand.Float () * Mathf.PI * 2f;
+			m_CycleOffset = rand.Float () * Mathf.PI * 2f;
 
 			if ( life >= 0 ) {
 
@@ -35,6 +37,12 @@ namespace pcg {
 
 			m_BirthTime = Time.time;
 			m_Age = 0;
+
+			if ( rand == null ) {
+
+				rand = gameObject.AddComponent<Rand> ();
+
+			}
 
 		}
 

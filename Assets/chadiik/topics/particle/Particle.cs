@@ -20,6 +20,8 @@ namespace pcg {
 
 		public Transform view;
 
+		public static Rand rand;
+
 		private Vector3 m_TargetPosition;
 
 		protected void Start () {
@@ -35,6 +37,12 @@ namespace pcg {
 			if ( drawLine ) {
 
 				DrawScreenLine.StrokeLineFrom ( transform.position );
+
+			}
+
+			if ( rand == null ) {
+
+				rand = gameObject.AddComponent<Rand> ();
 
 			}
 
@@ -88,7 +96,7 @@ namespace pcg {
 			Transform transform = particle.transform;
 
 			Vector3 position = transform.position;
-			position += Rand.CircleVector3 () * particle.speed * Time.deltaTime;
+			position += rand.CircleVector3 () * particle.speed * Time.deltaTime;
 
 			transform.position = position;
 
