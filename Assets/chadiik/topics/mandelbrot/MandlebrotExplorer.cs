@@ -39,7 +39,7 @@ public class MandlebrotExplorer : MonoBehaviour {
 	public float smooth = .1f;
 
 	private Vector4 m_Area = new Vector4 ();
-	private float m_Angle = 0f;
+	private float m_Scale = 0f, m_Angle = 0f;
 
 	private void UpdateValues () {
 
@@ -48,11 +48,14 @@ public class MandlebrotExplorer : MonoBehaviour {
 
 	}
 
-	public void UpdateShader (Material material) {
+	public void UpdateMaterial (Material material) {
+
+		m_Angle = Mathf.Lerp ( m_Angle, rotation, smooth );
+		m_Scale = Mathf.Lerp ( m_Scale, scale, smooth );
 
 		float aspect = ( float )Screen.width / ( float )Screen.height;
 
-		float scaleX = scale, scaleY = scale;
+		float scaleX = m_Scale, scaleY = m_Scale;
 		
 		if ( aspect > 1f ) {
 
@@ -65,9 +68,7 @@ public class MandlebrotExplorer : MonoBehaviour {
 
 		}
 
-		//Vector4 area = new Vector4 ( x, y, scaleX, scaleY );
-		m_Area.Set ( Mathf.Lerp ( m_Area.x, x, smooth ), Mathf.Lerp ( m_Area.y, y, smooth ), Mathf.Lerp ( m_Area.z, scaleX, smooth ), Mathf.Lerp ( m_Area.w, scaleY, smooth ) );
-		m_Angle = Mathf.Lerp ( m_Angle, rotation, smooth );
+		m_Area.Set ( Mathf.Lerp ( m_Area.x, x, smooth ), Mathf.Lerp ( m_Area.y, y, smooth ), scaleX, scaleY );
 		material.SetVector ( "_Area", m_Area );
 		material.SetFloat ( "_Angle", m_Angle );
 		material.SetFloat ( "_YMul", yMul );
@@ -167,8 +168,8 @@ public class MandlebrotExplorer : MonoBehaviour {
 
 		HandleInputs ();
 		UpdateValues ();
-		UpdateShader ( mandelbrotMaterial );
-		UpdateShader ( juliaMaterial );
+		UpdateMaterial ( mandelbrotMaterial );
+		UpdateMaterial ( juliaMaterial );
 
 		mandelbrotMaterial.SetFloat ( "_MJRatio", mandelbrotMJRatio );
 		juliaMaterial.SetFloat ( "_MJRatio", juliaMJRatio );

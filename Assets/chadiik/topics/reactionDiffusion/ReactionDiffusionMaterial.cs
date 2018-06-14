@@ -305,4 +305,22 @@ public class ReactionDiffusionMaterial : MonoBehaviour {
 	}
 
 #endif
+
+	private static Texture2D c_StandardConvolutionMap;
+	public static Texture2D StandardConvolutionMap {
+		get {
+
+			if ( c_StandardConvolutionMap == null ) {
+
+				c_StandardConvolutionMap = new Texture2D ( 1, 1, TextureFormat.RGBAFloat, false, true );
+				c_StandardConvolutionMap.SetPixel ( 0, 0, new Color ( -1f, .2f, .05f, 1f ) );
+				c_StandardConvolutionMap.filterMode = FilterMode.Trilinear;
+				c_StandardConvolutionMap.Apply ();
+
+			}
+
+			return c_StandardConvolutionMap;
+
+		}
+	}
 }

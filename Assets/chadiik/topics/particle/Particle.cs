@@ -14,7 +14,7 @@ namespace pcg {
 		public float slerp = 1f;
 		public float velocityMoment = 0f;
 		public float drag = 0f;
-		public Action< dynamic > motion;
+		public Action< object > motion;
 
 		public Vector3 delta;
 
@@ -89,7 +89,7 @@ namespace pcg {
 
 		/////
 
-		public static void Brownian ( dynamic value ) {
+		public static void Brownian ( object value ) {
 
 			Particle particle = value as Particle;
 

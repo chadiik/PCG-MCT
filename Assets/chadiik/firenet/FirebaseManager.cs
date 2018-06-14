@@ -2,6 +2,7 @@
 using Firebase;
 using Firebase.Unity.Editor;
 using Firebase.Database;
+using System.Threading.Tasks;
 #else
 using FirebaseInterface;
 using FirebaseInterface.Database;
@@ -10,7 +11,6 @@ using FirebaseInterface.Database;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
 using System;
 
 public class FirebaseManager : MonoBehaviour {

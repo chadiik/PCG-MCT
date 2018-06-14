@@ -18,7 +18,7 @@ namespace pcg {
 
 		}
 
-		public static void AffectedBrownian ( dynamic value ) {
+		public static void AffectedBrownian ( object value ) {
 
 			AffectedParticleRB particle = value as AffectedParticleRB;
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,8 +7,32 @@ using UnityEngine;
 
 #else
 
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using FirebaseInterface.Database;
+
+public class Task<T> {
+
+	public Task ( Func<T> action ) {
+
+	}
+
+	public void ContinueWith ( Action<Task> action ) {
+
+
+	}
+
+}
+
+public class Task {
+
+	public bool IsFaulted, IsCompleted;
+	public DataSnapshot Result;
+
+	public Task ( Action action ) {
+
+	}
+
+}
 
 namespace FirebaseInterface {
 

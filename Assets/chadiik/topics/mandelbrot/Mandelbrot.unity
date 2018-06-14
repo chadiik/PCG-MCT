@@ -231,7 +231,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 49265364}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cb2702325c281642b8c10b37c19936c, type: 3}
   m_Name: 
@@ -687,6 +687,8 @@ GameObject:
   - component: {fileID: 1841122165}
   - component: {fileID: 1841122164}
   - component: {fileID: 1841122168}
+  - component: {fileID: 1841122169}
+  - component: {fileID: 1841122170}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -769,3 +771,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: e99cfa162d9a56943a78cefed4e8aa06, type: 2}
+--- !u!114 &1841122169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1841122163}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ad26fed88a14cd419369697f987e783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explorer: {fileID: 49265365}
+  workingPath: Assets/chadiik/topics/mandelbrot
+  pathPreset: {fileID: 0}
+  presetName: 
+--- !u!114 &1841122170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1841122163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41be650e3cec89046aa1a5f3789030c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explorer: {fileID: 49265365}
+  path: {fileID: 11400000, guid: 9ff572091e590df458952732a33f6985, type: 2}
+  xys:
+    nodes: []
+    curves: []
+    length: 0
+    CurveChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  xya:
+    nodes: []
+    curves: []
+    length: 0
+    CurveChanged:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  travelSpeed: 0.04
+  travelled: 0
+  scale: 0
+  nomalizer: {x: 1, y: 1, z: 1}

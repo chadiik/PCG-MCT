@@ -7,7 +7,7 @@ public class MandelbrotPathCreator : MonoBehaviour {
 
 	public MandlebrotExplorer explorer;
 
-	public string savePath = "Assets/";
+	public string workingPath = "Assets/";
 	public MandelbrotPath pathPreset;
 	public string presetName;
 
@@ -18,6 +18,11 @@ public class MandelbrotPathCreator : MonoBehaviour {
 	}
 
 	private void SavePreset () {
+
+		string savePath = workingPath + "/Presets";
+
+		if ( AssetDatabase.IsValidFolder ( savePath ) == false )
+			AssetDatabase.CreateFolder ( workingPath, "Presets" );
 
 		string name = string.IsNullOrEmpty ( presetName ) ? "MBPath" + Mathf.Floor ( UnityEngine.Random.value * 999 ).ToString () : presetName;
 		string path = savePath + "/" + name + ".asset";
@@ -63,7 +68,7 @@ public class MandelbrotPathCreator : MonoBehaviour {
 
 		if ( Input.GetKey ( KeyCode.LeftControl ) ) {
 
-			if ( Input.GetKeyDown ( KeyCode.S ) ) {
+			if ( Input.GetKeyDown ( KeyCode.LeftAlt ) ) {
 
 				SavePreset ();
 

@@ -63,6 +63,12 @@ public class Rand : MonoBehaviour {
 
 	}
 
+	public int Int ( int min, int max ) {
+
+		return Mathf.FloorToInt ( Float ( min, max ) );
+
+	}
+
 	public Vector3 Vector3 () {
 
 		float randX = Float(),

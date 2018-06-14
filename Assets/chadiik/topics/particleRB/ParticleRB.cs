@@ -14,7 +14,7 @@ namespace pcg {
 
 		public Rigidbody rb;
 
-		public Action< dynamic > motion;
+		public Action< object > motion;
 
 		public Vector3 delta;
 
@@ -90,7 +90,7 @@ namespace pcg {
 
 		/////
 
-		public static void Brownian ( dynamic value ) {
+		public static void Brownian ( object value ) {
 
 			ParticleRB particle = value as ParticleRB;
 

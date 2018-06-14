@@ -18,7 +18,7 @@ namespace pcg {
 
 		}
 
-		public static void AffectedBrownian ( dynamic value ) {
+		public static void AffectedBrownian ( object value ) {
 
 			AffectedParticle particle = value as AffectedParticle;
 			Transform transform = particle.transform;
@@ -68,7 +68,7 @@ namespace pcg {
 
 		}
 
-		public static void AffectedBrownianTest ( dynamic value ) {
+		public static void AffectedBrownianTest ( object value ) {
 
 			AffectedParticle particle = value as AffectedParticle;
 
