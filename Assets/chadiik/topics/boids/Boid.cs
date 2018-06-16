@@ -13,6 +13,11 @@ namespace pcg {
 
 		public BoidsFlock flock;
 
+		public Vector3 CurrentHeading {
+			get { return currentHeading; }
+			set { currentHeading = value; }
+		}
+
 		private Vector3 currentHeading = new Vector3 ( 0, 0, 0 );
 		private Vector3 newHeading = new Vector3 ( 0, 0, 0 );
 

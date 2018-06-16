@@ -141,5 +141,16 @@ namespace Uween
         }
 
         protected abstract void UpdateValue(Easings e, float t, float d);
+
+		public static int DestroyAll( GameObject gameObject ) {
+
+			Tween[] tweens = gameObject.GetComponents<Tween> ();
+			foreach ( Tween tween in tweens ) {
+				GameObject.Destroy ( tween );
+			}
+
+			return tweens.Length;
+
+		}
     }
 }

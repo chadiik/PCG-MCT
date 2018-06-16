@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class Pattern : MonoBehaviour, IPattern {
 
 	public List<Vector3> vectors;
@@ -60,4 +61,9 @@ public class Pattern : MonoBehaviour, IPattern {
 
 	}
 
+	public virtual int Count {
+		get {
+			return vectors.Count;
+		}
+	}
 }

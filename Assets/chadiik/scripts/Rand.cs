@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class Rand : MonoBehaviour {
 
 	private static Rand m_DefaultInstance;
@@ -29,30 +30,32 @@ public class Rand : MonoBehaviour {
 
 	}
 
-	public System.Random generator;
+	private System.Random m_Generator;
+	public System.Random Generator {
+		get {
+			if(m_Generator == null ) {
+				m_Generator = new System.Random ( this.seed );
+			}
+			return m_Generator;
+		}
+	}
+
 	public int seed = 0;
 
 	private int m_Seeded = 0;
-
-	protected void Awake () {
-
-		if ( m_Seeded == 0 )
-			Seed ( seed );
-
-	}
 
 	public void Seed ( int seed ) {
 
 		Debug.Log ( "New seed: " + seed );
 		this.seed = seed;
-		generator = new System.Random ( this.seed );
+		m_Generator = new System.Random ( this.seed );
 		m_Seeded++;
 
 	}
 
 	public float Float () {
 
-		float rand = (float) generator.NextDouble ();
+		float rand = (float) Generator.NextDouble ();
 		return rand;
 
 	}

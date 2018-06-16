@@ -9,7 +9,7 @@ namespace pcg {
 
 		public Boid template;
 		[HideInInspector]
-		public List<Boid> boids;
+		public List<Boid> boids = new List<Boid> ();
 		public Pattern spawnPattern;
 		public Transform originTarget;
 		[HideInInspector]
@@ -38,17 +38,42 @@ namespace pcg {
 			if ( preset != null )
 				ApplyPreset ( preset );
 
-			boids = new List<Boid> ();
+			if ( spawnPattern != null ) {
 
-			foreach ( Vector3 v3 in spawnPattern ) {
+				foreach ( Vector3 v3 in spawnPattern ) {
 
-				Boid boid = Instantiate<Boid> ( template, transform );
-				boid.flock = this;
-				boid.transform.position = v3;
+					InstantiateBoid ( v3 );
 
-				boids.Add ( boid );
-				
+				}
+
 			}
+
+		}
+
+		public void CleanList () {
+
+			for(int i = 0; i < boids.Count; i++ ) {
+
+				if(boids[i] == null ) {
+
+					boids.RemoveAt ( i );
+					i--;
+
+				}
+
+			}
+
+		}
+
+		public Boid InstantiateBoid ( Vector3 v3 ) {
+
+			Boid boid = Instantiate<Boid> ( template, transform );
+			boid.flock = this;
+			boid.transform.position = v3;
+
+			boids.Add ( boid );
+
+			return boid;
 
 		}
 
@@ -77,6 +102,64 @@ namespace pcg {
 
 				savePreset = false;
 				CreatePreset ();
+
+			}
+
+		}
+
+		public void TransitionToPreset( FlockPreset targetPreset, float duration, Func<float, float, float, float> lerp = null ) {
+
+			StartCoroutine ( TransitionToPresetCoroutine ( targetPreset, duration, lerp != null ? lerp : Mathf.Lerp ) );
+
+		}
+
+		private IEnumerator TransitionToPresetCoroutine ( FlockPreset targetPreset, float duration, Func<float, float, float, float> lerp ) {
+
+			float startTime = Time.time;
+
+			float separationWeight = this.separationWeight;
+			float alignmentWeight = this.alignmentWeight;
+			float cohesionWeight = this.cohesionWeight;
+			float headToOriginWeight = this.headToOriginWeight;
+			float speed = this.speed;
+			float currentHeadingWeight = this.currentHeadingWeight;
+			float rotationSmooth = this.rotationSmooth;
+			float nearRadius = this.nearRadius;
+
+			float t = 0f;
+
+			while ( t < 1f ) {
+
+				this.separationWeight = lerp ( separationWeight, targetPreset.separationWeight, t );
+				this.alignmentWeight = lerp ( alignmentWeight, targetPreset.alignmentWeight, t );
+				this.cohesionWeight = lerp ( cohesionWeight, targetPreset.cohesionWeight, t );
+				this.headToOriginWeight = lerp ( headToOriginWeight, targetPreset.headToOriginWeight, t );
+				this.speed = lerp ( speed, targetPreset.speed, t );
+				this.currentHeadingWeight = lerp ( currentHeadingWeight, targetPreset.currentHeadingWeight, t );
+				this.rotationSmooth = lerp ( rotationSmooth, targetPreset.rotationSmooth, t );
+				this.nearRadius = lerp ( nearRadius, targetPreset.nearRadius, t );
+
+				t = ( Time.time - startTime ) / duration;
+				yield return new WaitForFixedUpdate ();
+
+			}
+
+			ApplyPreset ( targetPreset );
+
+		}
+
+		public void CreateBoidsOverDuration( Pattern pattern, float duration ) {
+			StartCoroutine ( CreateBoidsOverDurationCoroutine ( pattern, duration ) );
+		}
+
+		private IEnumerator CreateBoidsOverDurationCoroutine ( Pattern pattern, float duration ) {
+
+			float delay = duration / pattern.Count;
+
+			foreach ( Vector3 v3 in pattern ) {
+
+				InstantiateBoid ( v3 );
+				yield return new WaitForSeconds ( delay );
 
 			}
 

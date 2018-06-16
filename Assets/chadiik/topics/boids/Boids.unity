@@ -404,15 +404,15 @@ MonoBehaviour:
   agentsLayer:
     serializedVersion: 2
     m_Bits: 1024
-  separationWeight: 0.7
-  alignmentWeight: 0.4
-  cohesionWeight: 0.2
+  separationWeight: 0
+  alignmentWeight: 0
+  cohesionWeight: 0
   headToOriginWeight: 1
   speed: 0.2
   currentHeadingWeight: 0.4
   rotationSmooth: 0.1
   nearRadius: 8
-  preset: {fileID: 0}
+  preset: {fileID: 11400000, guid: 4b5ebf82d56d48e41b843cf39082938e, type: 2}
   newPresetName: 
   presetsPath: Assets/chadiik/topics/boids
   savePreset: 0
