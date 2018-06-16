@@ -20,7 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4634642119491268}
   - component: {fileID: 114362723190395038}
-  m_Layer: 0
+  - component: {fileID: 135973558344231514}
+  m_Layer: 10
   m_Name: Boid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,10 +124,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 493218c5ec79a9f4f8c355c6c520d27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  separationWeight: 1
-  alignmentWeight: 1
-  cohesionWeight: 1
-  headToOriginWeight: 0.2
   flock: {fileID: 0}
-  speed: 0.2
-  currentHeadingWeight: 1
+--- !u!135 &135973558344231514
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1251188134245962}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

@@ -12,7 +12,13 @@ namespace pcg {
 		public float speed = 1f;
 		public float life = -1;
 
-		public Rigidbody rb;
+		private Rigidbody m_RB;
+		public Rigidbody RB {
+			get {
+				if ( m_RB == null ) m_RB = GetComponent<Rigidbody> ();
+				return m_RB;
+			}
+		}
 
 		public Action< object > motion;
 
@@ -25,12 +31,6 @@ namespace pcg {
 		private float m_Age;
 
 		protected void Start () {
-
-			if ( rb == null ) {
-
-				rb = GetComponent<Rigidbody> ();
-
-			}
 
 			if ( motion == null ) {
 
@@ -52,7 +52,8 @@ namespace pcg {
 
 			m_Age = 0;
 
-			view = Instantiate ( templateView, transform );
+			if ( templateView != null )
+				view = Instantiate ( templateView, transform );
 
 		}
 
@@ -94,9 +95,9 @@ namespace pcg {
 
 			ParticleRB particle = value as ParticleRB;
 
-			Vector3 mForce = rand.CircleVector3 () * particle.speed;
+			Vector3 mForce = rand.CircleV3 () * particle.speed;
 
-			particle.rb.AddForce ( mForce, ForceMode.Force );
+			particle.RB.AddForce ( mForce, ForceMode.Force );
 
 		}
 

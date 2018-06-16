@@ -11,15 +11,7 @@ cohesion: steer to move toward the average position (center of mass) of local fl
 namespace pcg {
 	public class Boid : MonoBehaviour {
 
-		public float separationWeight = 1;
-		public float alignmentWeight = 1;
-		public float cohesionWeight = 1;
-		public float headToOriginWeight = 1;
-
 		public BoidsFlock flock;
-
-		public float speed = 1.0f;
-		public float currentHeadingWeight = 1.0f;
 
 		private Vector3 currentHeading = new Vector3 ( 0, 0, 0 );
 		private Vector3 newHeading = new Vector3 ( 0, 0, 0 );
@@ -29,12 +21,18 @@ namespace pcg {
 		private Vector3 cohesionVector = new Vector3 ( 0, 0, 0 );
 
 		private Heading[] headings;
+		private int skipCalcFor;
+		private Collider[] neighbours;
 
 		protected void Start () {
 
 			currentHeading = transform.forward;
 
 			headings = new Heading[] { new Heading (), new Heading (), new Heading (), new Heading (), new Heading () };
+
+			skipCalcFor = UnityEngine.Random.Range ( 0, 3 );
+
+			neighbours = new Collider [ flock.boids.Count / 4 ];
 
 		}
 
@@ -66,35 +64,41 @@ namespace pcg {
 		protected void FixedUpdate () {
 
 			// think
+			if ( --skipCalcFor < 0 ) {
+				PhyUpdate ( out separationVector, out alignmentVector, out cohesionVector );
+				skipCalcFor = 2;
+			}
+			/*
 			separationVector = Separation ();
 			alignmentVector = Alignment ();
 			cohesionVector = Cohesion ();
+			*/
 
 			// collect headings, but only use if non-zero
 
-			if ( currentHeadingWeight != 0.0f )
-				headings[ 0 ].Set ( transform.rotation, currentHeadingWeight );
+			if ( flock.currentHeadingWeight != 0.0f )
+				headings[ 0 ].Set ( transform.rotation, flock.currentHeadingWeight );
 			else
 				headings[ 0 ].Reset ();
 
-			if ( separationVector != Vector3.zero )
-				headings[ 1 ].Set ( Quaternion.LookRotation ( separationVector ), separationWeight );
+			if ( ! separationVector.NearZero() )
+				headings[ 1 ].Set ( Quaternion.LookRotation ( separationVector ), flock.separationWeight );
 			else
 				headings[ 1 ].Reset ();
 
-			if ( alignmentVector != Vector3.zero )
-				headings[ 2 ].Set ( Quaternion.LookRotation ( alignmentVector ), alignmentWeight );
+			if ( ! alignmentVector.NearZero () )
+				headings[ 2 ].Set ( Quaternion.LookRotation ( alignmentVector ), flock.alignmentWeight );
 			else
 				headings[ 2 ].Reset ();
 
-			if ( cohesionVector != Vector3.zero )
-				headings[ 3 ].Set ( Quaternion.LookRotation ( cohesionVector ), cohesionWeight );
+			if ( ! cohesionVector.NearZero () )
+				headings[ 3 ].Set ( Quaternion.LookRotation ( cohesionVector ), flock.cohesionWeight );
 			else
 				headings[ 3 ].Reset ();
 
-			if ( headToOriginWeight > 0f ) {
+			if ( flock.headToOriginWeight > 0f ) {
 
-				headings[ 4 ].Set ( Quaternion.LookRotation ( flock.origin - transform.position ), headToOriginWeight );
+				headings[ 4 ].Set ( Quaternion.LookRotation ( flock.origin - transform.position ), flock.headToOriginWeight );
 
 			}
 
@@ -117,12 +121,12 @@ namespace pcg {
 
 			}
 
-			transform.rotation = newHeading;
-			transform.position += transform.forward * speed;
+			transform.rotation = Quaternion.Lerp ( transform.rotation, newHeading, flock.rotationSmooth );
+			transform.position += transform.forward * flock.speed;
 
 		}
 
-		// separation: steer to avoid crowding local flockmates
+		#region Regular search
 		Vector3 Separation () {
 
 			Vector3 resultVector = new Vector3 ( 0, 0, 0 );
@@ -151,7 +155,6 @@ namespace pcg {
 			return resultVector;
 		}
 
-		// alignment: steer towards the average heading of local flockmates
 		Vector3 Alignment () {
 
 			Vector3 resultVector = new Vector3 ( 0, 0, 0 );
@@ -173,7 +176,6 @@ namespace pcg {
 			return resultVector;
 		}
 
-		// cohesion: steer to move toward the average position (center of mass) of local flockmates
 		Vector3 Cohesion () {
 
 			Vector3 resultVector = new Vector3 ( 0, 0, 0 );
@@ -199,28 +201,53 @@ namespace pcg {
 
 		}
 
-		/*
-		void GetFlock () {
+		#endregion
 
-			Boid[] boids = FindObjectsOfType ( typeof ( Boid ) ) as Boid[];
+		#region Physics search
+		void PhyUpdate ( out Vector3 separationVector, out Vector3 alignmentVector, out Vector3 cohesionVector) {
 
-			// add all boids except for self
-			for ( int i = 0; i < boids.Length; i++ ) {
+			separationVector = new Vector3 ( 0, 0, 0 );
+			alignmentVector = new Vector3 ( 0, 0, 0 );
+			cohesionVector = new Vector3 ( 0, 0, 0 );
 
-				int id1 = boids[ i ].GetInstanceID ();
-				Boid boid = gameObject.GetComponent ( typeof ( Boid ) ) as Boid;
-				int id2 = boid.GetInstanceID ();
+			Vector3 position = transform.position, neighbourPosition;
 
-				if ( id1 != id2 ) {
+			int numNeighbours = Physics.OverlapSphereNonAlloc ( position, flock.nearRadius, neighbours, flock.agentsLayer );
 
-					flock.Add ( boids[ i ] );
-					
+			if ( numNeighbours > 1 ) {
+
+				for ( int i = 0; i < numNeighbours; i++ ) {
+
+					Collider neighbour = neighbours[ i ];
+
+					if ( neighbour.gameObject == this.gameObject ) continue;
+
+					neighbourPosition = neighbour.transform.position;
+					Vector3 differenceVector = position - neighbourPosition;
+					float magnitudeSquared = differenceVector.sqrMagnitude;
+					float weightedMagnitude = 1.0f / magnitudeSquared;
+
+					// Separation
+					differenceVector = Vector3.Scale ( differenceVector, new Vector3 ( weightedMagnitude, weightedMagnitude, weightedMagnitude ) );
+					separationVector += differenceVector;
+
+					// Alignment
+					Vector3 otherHeading = neighbour.transform.forward;
+					alignmentVector = Vector3.Slerp ( alignmentVector, otherHeading, weightedMagnitude );
+
+					// Cohesion
+					cohesionVector += neighbourPosition;
+
 				}
+
+				cohesionVector /= ( float ) numNeighbours;
+				cohesionVector -= position;
 
 			}
 
 		}
-		*/
+
+		#endregion
 
 	}
 }

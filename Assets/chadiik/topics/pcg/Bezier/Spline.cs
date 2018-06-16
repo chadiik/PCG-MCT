@@ -80,17 +80,19 @@ namespace pcg {
 
 		}
 
-		public void Smooth ( float t = .5f ) {
+		public void Smooth ( float t = .5f, int length = 0 ) {
 
 			int numNodes = nodes.Count;
 			if ( numNodes < 4 ) return;
+
+			int offset = Mathf.Max(0, numNodes - length);
 
 			int numDeltas = numNodes - 1;
 			Vector3[] deltas = new Vector3[ numDeltas ];
 
 			Vector3 location = nodes[ 0 ].position;
 
-			for ( int i = 1; i < numNodes; i++ ) {
+			for ( int i = 1 + offset; i < numNodes; i++ ) {
 
 				Vector3 currentLocation = nodes[ i ].position;
 				deltas[ i - 1 ] = currentLocation - location;
@@ -98,7 +100,7 @@ namespace pcg {
 
 			}
 
-			for ( int i = 0; i < numDeltas - 1; i++ ) {
+			for ( int i = 0 + offset; i < numDeltas - 1; i++ ) {
 
 				SplineNode node = nodes[ i + 1 ];
 				Vector3 overshoot = deltas[ i ] * t;
@@ -107,14 +109,18 @@ namespace pcg {
 
 			}
 
-			// Smooth first
-			SplineNode first = nodes[ 0 ];
-			SplineNode second = nodes[ 1 ];
-			SplineNode third = nodes[ 2 ];
+			Vector3 midToThird, midToSecond;
 
-			Vector3 midToThird = ( third.position + first.position ) * t;
-			Vector3 midToSecond = ( midToThird + second.position ) * t;
-			first.SetDirection ( first.position + midToSecond - midToThird );
+			// Smooth first
+			if ( offset < 4 ) {
+				SplineNode first = nodes[ 0 ];
+				SplineNode second = nodes[ 1 ];
+				SplineNode third = nodes[ 2 ];
+
+				midToThird = ( third.position + first.position ) * t;
+				midToSecond = ( midToThird + second.position ) * t;
+				first.SetDirection ( first.position + midToSecond - midToThird );
+			}
 
 			// Smooth last
 			SplineNode last = nodes[ numNodes - 1 ];

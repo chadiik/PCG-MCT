@@ -23,6 +23,12 @@ namespace pcg {
 
 		protected void Start () {
 
+			if ( rand == null ) {
+
+				rand = gameObject.AddComponent<Rand> ();
+
+			}
+
 			float s = strength > 0 ? ( influenceStartRadius + influenceSpan ) * 2f : ( influenceStartRadius + influenceSpan ) * 2f;
 			transform.localScale = new Vector3 ( s, s, s );
 
@@ -37,12 +43,6 @@ namespace pcg {
 
 			m_BirthTime = Time.time;
 			m_Age = 0;
-
-			if ( rand == null ) {
-
-				rand = gameObject.AddComponent<Rand> ();
-
-			}
 
 		}
 
@@ -69,12 +69,10 @@ namespace pcg {
 				if ( float.IsNaN ( strength ) )
 					strength = 0;
 
-				float s = strength > 0 ? ( influenceStartRadius + influenceSpan ) * 1f : ( influenceStartRadius + influenceSpan ) * 1f;
-				s *= Mathf.Abs ( strength );
-
-				transform.localScale = new Vector3 ( s, s, s );
-
 			}
+
+			float s = influenceSpan;
+			transform.localScale = new Vector3 ( s, s, s );
 
 		}
 

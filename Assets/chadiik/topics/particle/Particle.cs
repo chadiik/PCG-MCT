@@ -96,7 +96,7 @@ namespace pcg {
 			Transform transform = particle.transform;
 
 			Vector3 position = transform.position;
-			position += rand.CircleVector3 () * particle.speed * Time.deltaTime;
+			position += rand.CircleV3 () * particle.speed * Time.deltaTime;
 
 			transform.position = position;
 

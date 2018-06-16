@@ -10,6 +10,7 @@ namespace pcg {
 		[ Header ( "Affected" ) ]
 		public float effectStrength = 1;
 
+		public static List<ParticleAffectorRB> commonAffectors = new List<ParticleAffectorRB>();
 		public List<ParticleAffectorRB> affectors;
 		
 		protected override void InitMotion () {
@@ -26,7 +27,8 @@ namespace pcg {
 
 			//Vector3 affectorsPull = AggregateAffectors ( particle.transform.position, particle.rb.mass, particle.affectors ) * particle.effectStrength;
 			Vector3 affectorsPull = AggregateAffectorsInfCurve ( particle.transform.position, particle.affectors ) * particle.effectStrength;
-			particle.rb.AddForce ( affectorsPull, ForceMode.Force );
+			affectorsPull += AggregateAffectorsInfCurve ( particle.transform.position, commonAffectors ) * particle.effectStrength;
+			particle.RB.AddForce ( affectorsPull, ForceMode.Force );
 
 		}
 

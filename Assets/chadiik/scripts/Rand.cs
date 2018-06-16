@@ -69,7 +69,7 @@ public class Rand : MonoBehaviour {
 
 	}
 
-	public Vector3 Vector3 () {
+	public Vector3 V3 () {
 
 		float randX = Float(),
 			randY = Float(),
@@ -81,7 +81,7 @@ public class Rand : MonoBehaviour {
 
 	}
 
-	public Vector3 CircleVector3 () {
+	public Vector3 CircleV3 () {
 
 		float randX = Float () - .5f,
 			randY = Float () - .5f,
@@ -90,6 +90,18 @@ public class Rand : MonoBehaviour {
 		Vector3 v3 = new Vector3 ( randX, randY, randZ ).normalized;
 
 		return v3;
+
+	}
+
+	public Vector3 RangedDirection (Vector3 direction, float radius ) {
+
+		float radradius = radius * Mathf.PI / 360;
+		float z = Float(Mathf.Cos(radradius), 1);
+		float t = Float(0, Mathf.PI * 2);
+		Vector3 cone = new Vector3 ( Mathf.Sqrt ( 1 - z * z ) * Mathf.Cos ( t ), Mathf.Sqrt ( 1 - z * z ) * Mathf.Sin ( t ), z );
+		Quaternion rotation = Quaternion.LookRotation(direction);
+
+		return ( rotation * cone ).normalized;
 
 	}
 

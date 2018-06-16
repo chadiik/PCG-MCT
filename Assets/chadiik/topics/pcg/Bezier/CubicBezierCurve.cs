@@ -149,8 +149,6 @@ namespace pcg {
 
 			}
 
-			Debug.Log ( m_Samples.Count );
-
 			CurveSample lastSample = new CurveSample ();
 			lastSample.location = GetLocation ( 1 );
 			lastSample.tangent = GetTangent ( 1 );
