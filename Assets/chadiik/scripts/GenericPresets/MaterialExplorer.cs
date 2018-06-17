@@ -34,7 +34,7 @@ public class MaterialExplorer : MonoBehaviour {
 
 	}
 
-	public void Explore () {
+	public List<GenericPreset.Property> Explore () {
 
 		Shader shader = material.shader;
 		int numProperties = ShaderUtil.GetPropertyCount( shader );
@@ -69,6 +69,8 @@ public class MaterialExplorer : MonoBehaviour {
 			properties.Add ( property );
 
 		}
+
+		return properties;
 
 	}
 

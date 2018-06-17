@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GenericPresetsUtil : MonoBehaviour {
 
@@ -109,6 +110,44 @@ public class GenericPresetsUtil : MonoBehaviour {
 			fullPath = path + "/" + newName + "_" + DateTime.Now.Ticks + ".asset";
 
 		AssetDatabase.CreateAsset ( newPreset, fullPath );
+
+	}
+
+	public static IEnumerator TransitionFromToCoroutine ( object originData, GenericPreset goal, MonoBehaviour target, float duration, UnityAction onCompleted = null, GenericPreset store = null ) {
+
+		GenericPreset origin = null;
+		if( originData == null && target is MaterialExplorer )
+			origin = GenericPreset.Create ( ( ( MaterialExplorer ) target ).Explore () );
+
+		if ( originData is string [] )
+			GenericPreset.Create ( target, originData as string [] );
+
+		if ( store == null )
+			store = ScriptableObject.CreateInstance<GenericPreset> ();
+
+
+		float startTime = Time.time;
+		float t = 0f;
+
+		while ( t < 1f ) {
+
+			GenericPreset.Lerp ( origin, goal, t, store );
+			t = ( Time.time - startTime ) / duration;
+
+			if ( target is MaterialExplorer )
+				store.ApplyMaterial ( ( ( MaterialExplorer ) target ).material );
+			else
+				store.Apply ( target );
+
+			yield return new WaitForFixedUpdate ();
+
+		}
+
+		if ( target is MaterialExplorer )
+			store.ApplyMaterial ( ( ( MaterialExplorer ) target ).material );
+		else
+			store.Apply ( target );
+
 
 	}
 

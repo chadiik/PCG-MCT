@@ -7,7 +7,7 @@ using Uween;
 
 public class Scene_Boids : MonoBehaviour {
 
-	public enum Step { Idle, Attraction, AttractionUpDown, SettleCohesion };
+	public enum Step { Idle, Attraction, AttractionUpDown, SettleCohesion, School2 };
 	public enum Parallel { Idle, LerpToSeparation };
 
 	public Step step;
@@ -26,14 +26,26 @@ public class Scene_Boids : MonoBehaviour {
 		public Pattern additionalBoidsPattern;
 		public float additionalBoidsCreateDuration;
 
+		[Header("Image effect")]
+		public GenericPreset underwaterOn;
+		public MaterialExplorer underwaterMaterial;
+		public GenericPreset backgroundWater;
+		public MaterialExplorer backgroundMaterial;
+
 		[Header("Fish school 1")]
 		public FlockPreset fishSchool1Preset;
 		public float fishSchool1TransitionDuration;
 		public Transform fish1Template;
+
+		[Header("Fish school 2")]
+		public FlockPreset fishSchool2Preset;
+		public float fishSchool2TransitionDuration;
+		public Pattern additionalSchool2Pattern;
+
 	}
 	public P p;
 
-		[Header("Mock")]
+	[Header("Mock")]
 	public bool mockPreviousStep = true;
 	public Pattern mockPattern;
 	public GameObject[] mockDestroy;
@@ -53,7 +65,7 @@ public class Scene_Boids : MonoBehaviour {
 			flock.spawnPattern = mockPattern;
 
 		}
-
+		
 	}
 
 	protected void Start () {
@@ -109,9 +121,36 @@ public class Scene_Boids : MonoBehaviour {
 			case Step.SettleCohesion: {
 
 					Tween.DestroyAll ( flock.originTarget.gameObject );
-					Scene_Camera.Instance.SmoothLookAt ( flock.originTarget, 2f, true );
+					Scene_Camera.Instance.SmoothLookAt ( flock.originTarget, 2f, false );
 					flock.TransitionToPreset ( p.fishSchool1Preset, p.fishSchool1TransitionDuration );
 					ConvertBoidsToTemplate ( p.fish1Template, p.fishSchool1TransitionDuration );
+
+					float transitionDuration = p.fishSchool1TransitionDuration * .5f;
+					IEnumerator transition = GenericPresetsUtil.TransitionFromToCoroutine(
+						null, p.underwaterOn, p.underwaterMaterial,
+						transitionDuration,
+						null, null
+					);
+
+					StartCoroutine ( transition );
+
+					IEnumerator transitionBkg = GenericPresetsUtil.TransitionFromToCoroutine(
+						null, p.backgroundWater, p.backgroundMaterial,
+						transitionDuration,
+						null, null
+					);
+
+					StartCoroutine ( transitionBkg );
+
+					step = Step.Idle;
+					break;
+				}
+
+			case Step.School2: {
+
+					flock.TransitionToPreset ( p.fishSchool2Preset, p.fishSchool2TransitionDuration );
+					flock.CreateBoidsOverDuration ( p.additionalSchool2Pattern, p.fishSchool2TransitionDuration );
+					Infinity.Apply ( flock.originTarget.gameObject, 10f, 6f, .01f );
 
 					step = Step.Idle;
 					break;
@@ -127,10 +166,14 @@ public class Scene_Boids : MonoBehaviour {
 
 	private IEnumerator ConvertBoidsToTemplateCoroutine ( Transform template, float duration ) {
 
-		float delay = duration / flock.boids.Count;
+		int numBoids = flock.boids.Count;
+		float delay = duration / numBoids;
+		bool templateUpdated = false;
 
 		int countNulls = 0;
-		foreach ( Boid boid in flock.boids ) {
+		for(int i = 0; i < numBoids; i++ ) {
+
+			Boid boid = flock.boids[i];
 
 			if ( boid != null ) {
 
@@ -139,6 +182,12 @@ public class Scene_Boids : MonoBehaviour {
 				Instantiate ( template, original.transform.parent );
 				Destroy ( original );
 				Scene_Particle.AppearZoom ( boid.gameObject, 0f );
+
+				if( templateUpdated == false ) {
+
+					flock.template = boid;
+
+				}
 
 				yield return new WaitForSeconds ( delay );
 
