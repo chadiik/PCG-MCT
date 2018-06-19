@@ -44,12 +44,12 @@ public class MarkovStringBhv : MonoBehaviour {
 
 				}
 
-			}
+			}/*
 			else {
 
 				input = lyrics;
 
-			}
+			}*/
 
 		}
 

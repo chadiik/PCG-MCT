@@ -19,6 +19,7 @@ public class MandelbrotPathCreator : MonoBehaviour {
 
 	private void SavePreset () {
 
+#if UNITY_EDITOR
 		string savePath = workingPath + "/Presets";
 
 		if ( AssetDatabase.IsValidFolder ( savePath ) == false )
@@ -27,6 +28,7 @@ public class MandelbrotPathCreator : MonoBehaviour {
 		string name = string.IsNullOrEmpty ( presetName ) ? "MBPath" + Mathf.Floor ( UnityEngine.Random.value * 999 ).ToString () : presetName;
 		string path = savePath + "/" + name + ".asset";
 		AssetDatabase.CreateAsset ( pathPreset, path );
+#endif
 
 	}
 

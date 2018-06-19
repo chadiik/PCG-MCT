@@ -5,7 +5,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class BackgroundQuad : MonoBehaviour {
 
-	public Camera camera;
+	public new Camera camera;
 	public float distance = 1f;
 
 	public void Match () {

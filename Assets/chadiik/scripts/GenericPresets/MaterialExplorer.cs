@@ -11,9 +11,7 @@ public class MaterialExplorer : MonoBehaviour {
 	public bool update = false;
 
 	protected void Start () {
-
-		Explore ();
-
+		
 	}
 
 	protected void Update () {
@@ -21,52 +19,107 @@ public class MaterialExplorer : MonoBehaviour {
 		if ( update ) {
 
 			update = false;
-			Explore ();
+			Explore ( null );
 
 		}
 
 		if(preset != null ) {
 
+			if ( properties == null ) {
+				FromPreset ( preset );
+			}
+
 			preset.ApplyMaterial ( material );
+
 			preset = null;
 
 		}
 
 	}
 
-	public List<GenericPreset.Property> Explore () {
+	public void FromPreset( GenericPreset source ) {
+
+		properties = new List<GenericPreset.Property> ();
+
+		foreach ( GenericPreset.Property property in source.properties ) {
+
+			properties.Add ( property.Clone () );
+
+		}
+
+		Debug.LogFormat ( "FromPreset {0}", properties.ArrayToString () );
+
+	}
+
+	public List<GenericPreset.Property> Explore ( GenericPreset template ) {
 
 		Shader shader = material.shader;
-		int numProperties = ShaderUtil.GetPropertyCount( shader );
 
-		if ( properties == null )
-			properties = new List<GenericPreset.Property> ( numProperties );
-		else
-			properties.Clear ();
+		if ( Application.isEditor && template == null ) {
+#if UNITY_EDITOR
+			int numProperties = ShaderUtil.GetPropertyCount( shader );
 
-		for ( int i = 0; i < numProperties; i++ ) {
+			if ( properties == null )
+				properties = new List<GenericPreset.Property> ( numProperties );
+			else
+				properties.Clear ();
 
-			string propertyName = ShaderUtil.GetPropertyName(shader, i);
-			ShaderUtil.ShaderPropertyType type = ShaderUtil.GetPropertyType(shader, i);
+			for ( int i = 0; i < numProperties; i++ ) {
 
-			GenericPreset.Property property = new GenericPreset.Property ( propertyName, GenericPreset.PType.Null);
+				string propertyName = ShaderUtil.GetPropertyName(shader, i);
+				ShaderUtil.ShaderPropertyType type = ShaderUtil.GetPropertyType(shader, i);
 
-			switch ( type ) {
-				case ShaderUtil.ShaderPropertyType.Float:
-				case ShaderUtil.ShaderPropertyType.Range:
-					property = new GenericPreset.Property ( propertyName, material.GetFloat ( propertyName ) );
-					break;
+				GenericPreset.Property property = new GenericPreset.Property ( propertyName, GenericPreset.PType.Null);
 
-				case ShaderUtil.ShaderPropertyType.Vector:
-					property = new GenericPreset.Property ( propertyName, ( Vector3 ) material.GetVector ( propertyName ) );
-					break;
+				switch ( type ) {
+					case ShaderUtil.ShaderPropertyType.Float:
+					case ShaderUtil.ShaderPropertyType.Range:
+						property = new GenericPreset.Property ( propertyName, material.GetFloat ( propertyName ) );
+						break;
 
-				case ShaderUtil.ShaderPropertyType.Color:
-					property = new GenericPreset.Property ( propertyName, material.GetColor ( propertyName ) );
-					break;
+					case ShaderUtil.ShaderPropertyType.Vector:
+						property = new GenericPreset.Property ( propertyName, ( Vector3 ) material.GetVector ( propertyName ) );
+						break;
+
+					case ShaderUtil.ShaderPropertyType.Color:
+						property = new GenericPreset.Property ( propertyName, material.GetColor ( propertyName ) );
+						break;
+				}
+
+				properties.Add ( property );
+
 			}
 
-			properties.Add ( property );
+			return properties;
+
+#endif
+		}
+
+		if ( properties == null && template == null )
+			return null;
+
+		if( properties == null || properties.Count != template.properties.Count )
+			FromPreset ( template );
+
+		foreach ( GenericPreset.Property property in properties ) {
+
+			string propertyName = property.key;
+
+			switch ( property.type ) {
+
+				case GenericPreset.PType.Number:
+					property.Value = material.GetFloat ( propertyName );
+					break;
+
+				case GenericPreset.PType.V3:
+					property.Value = material.GetVector ( propertyName );
+					break;
+
+				case GenericPreset.PType.Color:
+					property.Value = material.GetColor ( propertyName );
+					break;
+
+			}
 
 		}
 

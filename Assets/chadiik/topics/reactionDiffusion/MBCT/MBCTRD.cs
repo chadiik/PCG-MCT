@@ -18,7 +18,7 @@ public class MBCTRD : ReactionDiffusionMapped {
 	}
 
 	protected override Color CreateConvolutionColor ( float convCell, float convAdj, float convDiag, float deltaTime, float u, float v ) {
-
+		/*
 		int index = ( int )( v * ( float )killMask.height ) * killMask.width + ( int )( u * ( float )killMask.width );
 		float value = m_KillMaskColors[ index ].r;
 

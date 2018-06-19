@@ -27,7 +27,7 @@ public class MarkovDataStringBhv : MonoBehaviour {
 		model = new DataStringMarkov(n);
 		model.EnsureUniqueWalk = true;
 
-		string[] lineDelim = new[] { "\r\n", "\r", "\n" };
+		//string[] lineDelim = new[] { "\r\n", "\r", "\n" };
 		string[] wordDelim = new[] { " " };
 		char[] trimChars = new[] { '\r', '\n', ' ', '"', '\'' };
 

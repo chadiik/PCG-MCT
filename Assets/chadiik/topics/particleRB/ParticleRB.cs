@@ -28,8 +28,6 @@ namespace pcg {
 
 		public static Rand rand;
 
-		private float m_Age;
-
 		protected void Start () {
 
 			if ( motion == null ) {
@@ -49,8 +47,6 @@ namespace pcg {
 				rand = gameObject.AddComponent<Rand> ();
 
 			}
-
-			m_Age = 0;
 
 			if ( templateView != null )
 				view = Instantiate ( templateView, transform );

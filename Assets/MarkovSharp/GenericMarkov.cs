@@ -377,7 +377,7 @@ namespace MarkovSharp {
 			try {
 				chosen = Chain.GetValuesForKey ( key );
 			}
-			catch ( KeyNotFoundException e ) { }
+			catch ( KeyNotFoundException ) { }
 
 			return chosen;
 		}

@@ -91,7 +91,7 @@ public class NSortableList : MonoBehaviour, INSortable {
 		for ( int i = 0, numItems = items.Count; i < numItems; i++ ) {
 
 			string name = items[i].name;
-			result += name.Substring ( 0, Mathf.Min ( name.Length, 6 ) ) + ( i < numItems - 1 ? ", " : "" );
+			result += name.Substring ( 0, Mathf.Min ( name.Length, 12 ) ) + ( i < numItems - 1 ? ", " : "" );
 
 		}
 

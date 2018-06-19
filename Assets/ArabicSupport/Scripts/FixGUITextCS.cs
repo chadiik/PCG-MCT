@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using ArabicSupport;
+using UnityEngine.UI;
 
 public class FixGUITextCS : MonoBehaviour {
 	
@@ -10,7 +11,7 @@ public class FixGUITextCS : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		gameObject.GetComponent<GUIText>().text = ArabicFixer.Fix(text, tashkeel, hinduNumbers);
+		gameObject.GetComponent<Text>().text = ArabicFixer.Fix(text, tashkeel, hinduNumbers);
 	}
 	
 	// Update is called once per frame

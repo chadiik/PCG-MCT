@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34067e2fb9056e147a834a1fb6358db9, type: 3}
   m_Name: FirebaseToggle
   m_EditorClassIdentifier: 
-  path: Editor Default Resources,Firebase,Parse,PlayServicesResolver,StreamingAssets,Plugins
+  path: Editor Default Resources,Firebase,Parse,PlayServicesResolver,StreamingAssets,Plugins/Android/Firebase,Plugins/iOS/Firebase,Plugins/x86_64/Firebase
   define: FIREBASE
   platforms: 01000000
   enabled: 1

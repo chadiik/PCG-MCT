@@ -9,6 +9,8 @@ using Uween;
 
 public class Scene_Particle : MonoBehaviour {
 
+	public static Scene_Particle instance;
+
 	public const int MAX_PARTICLES = 60;
 	public static int particlesCount = 0;
 	public static float particlesCreationInterval = .1f;
@@ -44,7 +46,7 @@ public class Scene_Particle : MonoBehaviour {
 	}
 	public P p;
 
-	public enum Step { Idle, AppearZoom, UpToSpeed, Travel, AffectedParticleRB, BeginVineTrail, BackEraseVines };
+	public enum Step { Idle, AppearZoom, UpToSpeed, Travel, AffectedParticleRB, BeginVineTrail, AutomateBranching, BackEraseVines, Boids };
 	public Step step = Step.AppearZoom;
 
 	public Rand rand;
@@ -58,11 +60,17 @@ public class Scene_Particle : MonoBehaviour {
 	public int level = 0;
 
 	public List<Scene_Particle> branches;
+	public bool automatedBranching = false;
 	public bool addBranch = false;
 	//internal 
 
 	public static UnityAction EMPTY = () => { };
 	public UnityAction bloom = EMPTY;
+
+	protected void Awake () {
+		if(instance == null)
+			instance = this;
+	}
 
 	protected void Start() {
 
@@ -94,6 +102,22 @@ public class Scene_Particle : MonoBehaviour {
 		affectedParticle.motion = DirectedAffectedBrownian;
 
 	}
+
+	protected void FixedUpdate () {
+
+		AutomatedBranching ();
+
+		if ( addBranch ) {
+			addBranch = false;
+
+			Branch ();
+
+		}
+
+		UpdateLife ();
+
+	}
+
 
 	public void AddAffectors ( ParticleAffectorRB [] affectors ) {
 
@@ -172,6 +196,7 @@ public class Scene_Particle : MonoBehaviour {
 		//Debug.LogFormat ( "mainScenario: {0}, {1} vineViews", mainScenario, vineViews.Count );
 		if ( mainScenario ) {
 
+			//vine.gameObject.SetActive ( false );
 			vineViews.Add ( vine.gameObject );
 			StartCoroutine ( ScheduledErase ( vineViews, () => {
 
@@ -197,6 +222,7 @@ public class Scene_Particle : MonoBehaviour {
 
 		}
 
+		automatedBranching = false;
 		p.automatedBranchingRate = 0f;
 
 		if ( vine != null ) {
@@ -205,30 +231,19 @@ public class Scene_Particle : MonoBehaviour {
 
 	}
 
-	protected void FixedUpdate () {
-
-		AutomatedBranching ();
-
-		if ( addBranch ) {
-			addBranch = false;
-
-			Branch ();
-
-		}
-
-		UpdateLife ();
-
-	}
-
 	private void AutomatedBranching () {
 
-		float time = Time.time;
-		if( time > lastCreatedParticleTime + particlesCreationInterval && particlesCount < MAX_PARTICLES && p.automatedBranchingRate > .0000001f && level < p.maxLevel ) {
+		if ( automatedBranching ) {
 
-			float branchProb = rand.Float ();
-			if(branchProb < p.automatedBranchingRate ) {
+			float time = Time.time;
+			if ( time > lastCreatedParticleTime + particlesCreationInterval && particlesCount < MAX_PARTICLES && p.automatedBranchingRate > .0000001f && level < p.maxLevel ) {
 
-				Branch ();
+				float branchProb = rand.Float ();
+				if ( branchProb < p.automatedBranchingRate ) {
+
+					Branch ();
+
+				}
 
 			}
 
@@ -256,7 +271,7 @@ public class Scene_Particle : MonoBehaviour {
 					AppearZoom ( gameObject, 1f );
 					yield return new WaitForSeconds ( 1f );
 
-					step = Step.UpToSpeed;
+					step = Step.Idle;
 					break;
 				}
 
@@ -287,16 +302,18 @@ public class Scene_Particle : MonoBehaviour {
 
 					#endregion
 
-					step = Step.AffectedParticleRB;
+					step = Step.Travel;
 					break;
 				}
 
 
 			case Step.AffectedParticleRB: {
 					affectedParticle.enabled = true;
+					Vector3 velocity = direction.vector * p.particleSpeed;
+					affectedParticle.GetComponent<Rigidbody> ().AddForce ( velocity * 2f, ForceMode.Impulse );
 
 					//step = Step.Idle;
-					step = Step.BeginVineTrail;
+					step = Step.Idle;
 					break;
 				}
 
@@ -318,6 +335,14 @@ public class Scene_Particle : MonoBehaviour {
 					vine.p.size = p.vineShapeSize;
 					vine.mainTarget = transform;
 					vine.Begin ();
+
+					step = Step.Idle;
+					break;
+				}
+
+			case Step.AutomateBranching: {
+
+					automatedBranching = true;
 
 					step = Step.Idle;
 					break;
@@ -369,7 +394,7 @@ public class Scene_Particle : MonoBehaviour {
 
 		if( mainScenario && branchInit == false ) {
 			branchInit = true;
-			p.cameraFollowOffset *= 2f;
+			p.cameraFollowOffset *= 4f;
 		}
 
 		Transform branchObject = Instantiate<Transform>(branchingParticlesTemplate);
@@ -405,7 +430,6 @@ public class Scene_Particle : MonoBehaviour {
 
 	private IEnumerator BranchingCoroutine () {
 
-		Debug.Log ( "Branching" );
 		while ( isActiveAndEnabled )
 			yield return BranchingExecution ();
 

@@ -1,4 +1,4 @@
-﻿using CsvHelper;
+﻿//using CsvHelper;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ public class CSVHelperData : MonoBehaviour {
 	public string path = "Assets";
 
 	protected void Start() {
-
+		/*
 		Type classType;
 		switch (descriptor) {
 
@@ -25,8 +25,9 @@ public class CSVHelperData : MonoBehaviour {
 
 		}
 
+		classType = null;
 		TextReader streamReader = new StreamReader(path);
-
+		*/
 		//var csv = new CsvReader(streamReader);
 		//var records = csv.GetRecords<Lyrics>();
 

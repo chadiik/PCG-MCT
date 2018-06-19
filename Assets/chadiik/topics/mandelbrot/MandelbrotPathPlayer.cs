@@ -79,11 +79,12 @@ public class MandelbrotPathPlayer : MonoBehaviour {
 		explorer.scale = Mathf.Lerp ( s1, s2, aTime );*/
 
 		return;
-
+		/*
 		MandelbrotPath.Node node = path.nodes[ ( int )( travelled * ( float )( path.nodes.Count - 1 ) ) ];
 		explorer.x = node.x;
 		explorer.y = node.y;
 		scale = explorer.scale = node.s;
+		*/
 
 	}
 

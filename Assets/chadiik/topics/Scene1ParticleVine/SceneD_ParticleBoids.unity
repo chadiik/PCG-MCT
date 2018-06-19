@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 8
+  serializedVersion: 9
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -39,6 +39,7 @@ RenderSettings:
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
   m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -54,11 +55,10 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 10
     m_Resolution: 2
     m_BakeResolution: 40
-    m_TextureWidth: 1024
-    m_TextureHeight: 1024
+    m_AtlasSize: 1024
     m_AO: 0
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
@@ -88,6 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -273,18 +274,24 @@ MonoBehaviour:
   influence:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 2
+    - serializedVersion: 3
       time: 0
       value: 0
       inSlope: 2
       outSlope: 2
       tangentMode: 0
-    - serializedVersion: 2
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 1
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
@@ -327,6 +334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 516896209}
   - component: {fileID: 516896208}
+  - component: {fileID: 516896210}
   m_Layer: 0
   m_Name: BackgroundMaterialExplorer
   m_TagString: Untagged
@@ -362,6 +370,24 @@ Transform:
   m_Father: {fileID: 1652420473}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &516896210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 516896207}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b553ecfb370f1b40963fe19dcb3a1c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 516896208}
+  propertiesCSV: a, b, v3, color
+  lerpPresets: []
+  preset: {fileID: 0}
+  newPresetName: 
+  presetsPath: Assets/chadiik/topics/Scene1ParticleVine
+  savePreset: 0
 --- !u!1 &658840775
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,6 +402,7 @@ GameObject:
   - component: {fileID: 658840784}
   - component: {fileID: 658840781}
   - component: {fileID: 658840780}
+  - component: {fileID: 658840783}
   - component: {fileID: 658840782}
   m_Layer: 0
   m_Name: Main Camera
@@ -429,6 +456,7 @@ Camera:
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 0
+  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
@@ -443,6 +471,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1720946989}
   - {fileID: 1652420473}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -479,18 +508,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 658840775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b553ecfb370f1b40963fe19dcb3a1c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1744f00442f6f1b42b3c06f1ef600a6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 516896208}
-  propertiesCSV: a, b, v3, color
-  lerpPresets:
-  - {fileID: 0}
-  - {fileID: 0}
-  preset: {fileID: 0}
-  newPresetName: 
-  presetsPath: Assets/chadiik/topics/Scene1ParticleVine
-  savePreset: 0
+  firebase: {fileID: 0}
+  databasePath: admin/camera
+  updateInterval: 0.2
+  accessType: 3
+  writeValuesOnLoad: 0
+  target: {fileID: 658840783}
+  propertiesCSV: deltaMove, zoom
+  values: {fileID: 0}
+--- !u!114 &658840783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 658840775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa6ad516e41cc4b41abc601db985bf4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orbitTarget: {fileID: 0}
+  deltaMoveMultiplier: 4.5
+  zoomMultipler: 3
+  positionalDamping: 0.05
+  rotationalDamping: 0.05
+  deltaMove: {x: 0, y: 0, z: 0}
+  zoom: 0
 --- !u!114 &658840784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,7 +589,7 @@ MonoBehaviour:
     brownianCycleDuration: 1
     particleBrownianSpeedStart: 0
     particleBrownianSpeedEnd: 0.5
-    particleUpToSpeedDuration: 1
+    particleUpToSpeedDuration: 2
     particleConeStart: 360
     particleConeEnd: 360
     camera: {fileID: 658840778}
@@ -553,9 +599,9 @@ MonoBehaviour:
     lifeDuration: 3.4028235e+38
     vineShapeSize: 1
     automatedBranchingRate: 0.01
-    maxLevel: 2
-    minBranchLifeDuration: 20
-    maxBranchLifeDuration: 30
+    maxLevel: 4
+    minBranchLifeDuration: 10
+    maxBranchLifeDuration: 25
     lifeDurationMultiplier: 0.7
     levelShapeSizeMultiplier: 0.7
   step: 1
@@ -570,6 +616,7 @@ MonoBehaviour:
     type: 2}
   level: 0
   branches: []
+  automatedBranching: 0
   addBranch: 0
 --- !u!96 &1076857136
 TrailRenderer:
@@ -586,6 +633,7 @@ TrailRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 5f0ddec7c262f6e49a9bc64a0207939b, type: 2}
   m_StaticBatchInfo:
@@ -614,12 +662,15 @@ TrailRenderer:
     widthCurve:
       serializedVersion: 2
       m_Curve:
-      - serializedVersion: 2
+      - serializedVersion: 3
         time: 0
         value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -673,7 +724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   templateView: {fileID: 0}
   d2: 0
-  speed: 30
+  speed: 120
   life: -1
   delta: {x: 0, y: 0, z: 0}
   view: {fileID: 0}
@@ -712,6 +763,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 5f0ddec7c262f6e49a9bc64a0207939b, type: 2}
   m_StaticBatchInfo:
@@ -807,6 +859,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: ef1d2b6ee7052df4fb87e7bf72dafcf7, type: 2}
   m_StaticBatchInfo:
@@ -837,9 +890,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Convex: 0
-  m_InflateMesh: 0
+  m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &1183958838
@@ -1070,6 +1123,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -1122,12 +1176,12 @@ Transform:
   m_GameObject: {fileID: 1652420472}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 999}
-  m_LocalScale: {x: 2364.0305, y: 1153.5458, z: 0}
+  m_LocalScale: {x: 2250.821, y: 1153.5458, z: 0}
   m_Children:
   - {fileID: 2047702619}
   - {fileID: 516896209}
   m_Father: {fileID: 658840779}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1652420474
 MonoBehaviour:
@@ -1151,6 +1205,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1720946989}
   - component: {fileID: 1720946990}
+  - component: {fileID: 1720946991}
   m_Layer: 0
   m_Name: UnderwaterMaterialExplorer
   m_TagString: Untagged
@@ -1164,12 +1219,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1720946988}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 10}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
-  m_Father: {fileID: 1870348214}
-  m_RootOrder: 3
+  m_Father: {fileID: 658840779}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1720946990
 MonoBehaviour:
@@ -1186,6 +1241,24 @@ MonoBehaviour:
   properties: []
   preset: {fileID: 11400000, guid: 14c7bca30d50b474988c08fe2eca2903, type: 2}
   update: 0
+--- !u!114 &1720946991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1720946988}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b553ecfb370f1b40963fe19dcb3a1c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1720946990}
+  propertiesCSV: a, b, v3, color
+  lerpPresets: []
+  preset: {fileID: 0}
+  newPresetName: 
+  presetsPath: Assets/chadiik/topics/Scene1ParticleVine
+  savePreset: 0
 --- !u!1 &1870348210
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,6 +1271,7 @@ GameObject:
   - component: {fileID: 1870348211}
   - component: {fileID: 1870348215}
   - component: {fileID: 1870348213}
+  - component: {fileID: 1870348216}
   m_Layer: 0
   m_Name: Flock
   m_TagString: Untagged
@@ -1507,6 +1581,7 @@ MonoBehaviour:
   parallel: 0
   flock: {fileID: 1870348211}
   p:
+    camView: {fileID: 11400000, guid: e206ea7ea3db23a439ecb6fcb3d6812a, type: 2}
     separationPreset: {fileID: 11400000, guid: 989fac644af2b5a4d9dca1af05f2aa75, type: 2}
     separationTransitionDuration: 3
     additionalBoidsPattern: {fileID: 104770043}
@@ -1515,7 +1590,7 @@ MonoBehaviour:
     underwaterMaterial: {fileID: 1720946990}
     backgroundWater: {fileID: 11400000, guid: 916177364864c1c47abc8d6c7b194cfd, type: 2}
     backgroundMaterial: {fileID: 516896208}
-    fishSchool1Preset: {fileID: 11400000, guid: 23b88720f597c774fa8a1701d7ee5830,
+    fishSchool1Preset: {fileID: 11400000, guid: 4b54a24936d7794458007e47d510da3b,
       type: 2}
     fishSchool1TransitionDuration: 3
     fish1Template: {fileID: 4368708206887394, guid: c0c03dc382ae5784e83f0342e2477d49,
@@ -1524,7 +1599,15 @@ MonoBehaviour:
       type: 2}
     fishSchool2TransitionDuration: 5
     additionalSchool2Pattern: {fileID: 1264463968}
-  mockPreviousStep: 1
+    birdsFlock1Preset: {fileID: 11400000, guid: 2d95b26e3311a8d4dbd1d38baae255ec,
+      type: 2}
+    birdsFlock1TransitionDuration: 2
+    birds1Template: {fileID: 4099676012137368, guid: 0e0ba38feed77a549ad4f4876672ca81,
+      type: 2}
+    skySunset: {fileID: 11400000, guid: ccf3b8979dd2ecb419ca7070f3dea555, type: 2}
+    backgroundSkySunset: {fileID: 11400000, guid: e8f2e08ff7690144d960e8efb006d969,
+      type: 2}
+  mockPreviousStep: 0
   mockPattern: {fileID: 1870348215}
   mockDestroy:
   - {fileID: 313554369}
@@ -1554,7 +1637,6 @@ Transform:
   - {fileID: 1386653092}
   - {fileID: 104770041}
   - {fileID: 1264463969}
-  - {fileID: 1720946989}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1591,6 +1673,26 @@ MonoBehaviour:
   size: 10
   rand: {fileID: 1870348213}
   center: {fileID: 1870348214}
+--- !u!114 &1870348216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1870348210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1744f00442f6f1b42b3c06f1ef600a6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firebase: {fileID: 0}
+  databasePath: scene/params
+  updateInterval: 0.2
+  accessType: 3
+  writeValuesOnLoad: 1
+  target: {fileID: 1870348211}
+  propertiesCSV: separationWeight, alignmentWeight, cohesionWeight, headToOriginWeight,
+    speed
+  values: {fileID: 0}
 --- !u!1 &2047702618
 GameObject:
   m_ObjectHideFlags: 0
@@ -1635,6 +1737,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: b317155876d151644b5db950a7406bab, type: 2}
   m_StaticBatchInfo:
@@ -1665,9 +1768,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Convex: 0
-  m_InflateMesh: 0
+  m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &2047702622

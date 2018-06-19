@@ -34,4 +34,10 @@ public class Infinity : MonoBehaviour {
 
 	}
 
+	public static void Remove(GameObject target ) {
+		Infinity behaviour = target.GetComponent<Infinity>();
+		if ( behaviour != null )
+			Destroy ( behaviour );
+	}
+
 }

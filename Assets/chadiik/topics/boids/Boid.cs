@@ -19,7 +19,6 @@ namespace pcg {
 		}
 
 		private Vector3 currentHeading = new Vector3 ( 0, 0, 0 );
-		private Vector3 newHeading = new Vector3 ( 0, 0, 0 );
 
 		private Vector3 separationVector = new Vector3 ( 0, 0, 0 );
 		private Vector3 alignmentVector = new Vector3 ( 0, 0, 0 );

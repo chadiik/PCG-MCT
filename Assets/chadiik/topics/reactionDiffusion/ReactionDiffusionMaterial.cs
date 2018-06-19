@@ -212,7 +212,7 @@ public class ReactionDiffusionMaterial : MonoBehaviour {
 	private void UVParameters ( Vector2 uv, int tIndex ) {
 		bool feedKill = tIndex == 4 || tIndex == 5;
 		bool ABRates = tIndex == 2 || tIndex == 3;
-		bool something = tIndex == 8 || tIndex == 9;
+		//bool something = tIndex == 8 || tIndex == 9;
 
 		if ( feedKill ) {
 

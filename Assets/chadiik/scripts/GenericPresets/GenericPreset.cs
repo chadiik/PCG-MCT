@@ -101,6 +101,10 @@ public class GenericPreset : ScriptableObject {
 
 		}
 
+		public override string ToString () {
+			return string.Format ( "Property({0}: {1})", key, Value.ToString () );
+		}
+
 		public static object Lerp(Property a, Property b, float t ) {
 
 			PType type = a.type;
@@ -165,10 +169,75 @@ public class GenericPreset : ScriptableObject {
 		foreach ( string property in propertyNames ) {
 
 			System.Reflection.FieldInfo sourceField = sourceType.GetField ( property );
-			object sourceProperty = sourceField.GetValue ( source );
+			Type propertyType = null;
+			object sourceProperty = null;
+			if (sourceField != null ) {
 
-			Property prop = Property.Get ( property, sourceProperty, sourceField.FieldType );
-			properties.Add ( prop );
+				sourceProperty = sourceField.GetValue ( source );
+				propertyType = sourceField.FieldType;
+
+			}
+			else {
+
+				System.Reflection.PropertyInfo sourcePropertyInfo = sourceType.GetProperty ( property );
+				sourceProperty = sourcePropertyInfo.GetValue ( source );
+				propertyType = sourcePropertyInfo.PropertyType;
+
+			}
+
+			Property prop = Find( property );
+
+			if ( prop == null ) {
+
+				prop = Property.Get ( property, sourceProperty, propertyType );
+				properties.Add ( prop );
+
+			}
+			else {
+
+				prop.Value = sourceProperty;
+
+			}
+
+		}
+
+	}
+
+	public void UpdateProperties ( UnityEngine.Object source ) {
+
+		Type sourceType = source.GetType();
+
+		foreach ( Property property in properties ) {
+
+			System.Reflection.FieldInfo sourceField = sourceType.GetField ( property.key );
+
+			object sourceProperty = null;
+			if ( sourceField != null ) {
+
+				sourceProperty = sourceField.GetValue ( source );
+
+			}
+			else {
+
+				System.Reflection.PropertyInfo sourcePropertyInfo = sourceType.GetProperty ( property.key );
+				sourceProperty = sourcePropertyInfo.GetValue ( source );
+
+			}
+
+			property.Value = sourceProperty;
+
+		}
+
+	}
+
+	public void UpdateProperties ( IEnumerable<Property> newProperties ) {
+
+		foreach ( Property newProperty in newProperties ) {
+
+			Property property = Find(newProperty.key);
+
+			if(property != null)
+				property.Value = newProperty.Value;
 
 		}
 
@@ -185,8 +254,17 @@ public class GenericPreset : ScriptableObject {
 
 			System.Reflection.FieldInfo targetField = targetType.GetField ( property.key );
 
-			//Debug.LogFormat ( "Applying property {0}({1}) of type {2}", property.key, property.Value, property.type.ToString () );
-			targetField.SetValue ( target, property.Value );
+			if ( targetField != null ) {
+
+				targetField.SetValue ( target, property.Value );
+
+			}
+			else {
+
+				System.Reflection.PropertyInfo targetProperty = targetType.GetProperty ( property.key );
+				targetProperty.SetValue ( target, property.Value );
+
+			}
 
 		}
 	}

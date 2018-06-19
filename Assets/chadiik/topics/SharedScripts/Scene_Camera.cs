@@ -16,7 +16,7 @@ public class Scene_Camera : MonoBehaviour {
 	}
 
 
-	public Camera camera;
+	public new Camera camera;
 
 	private Transform m_LookAtTarget;
 	public Transform LookAt {

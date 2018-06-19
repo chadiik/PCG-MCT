@@ -17,7 +17,6 @@ namespace pcg {
 		public Rand rand;
 
 		private float m_Strength;
-		private float m_CycleOffset;
 		private float m_BirthTime;
 		private float m_Age;
 
@@ -33,7 +32,6 @@ namespace pcg {
 			transform.localScale = new Vector3 ( s, s, s );
 
 			m_Strength = strength;
-			m_CycleOffset = rand.Float () * Mathf.PI * 2f;
 
 			if ( life >= 0 ) {
 

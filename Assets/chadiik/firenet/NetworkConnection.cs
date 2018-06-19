@@ -23,7 +23,6 @@ public class NetworkConnection : NetworkManager {
 	public static int PORT = 7777;
 
 	private NetworkClient m_Client;
-	private bool m_IsHost;
 
 	public delegate void ConnectionEvent ( int connectionId );
 	public ConnectionEvent OnClientHasConnected;
@@ -48,9 +47,7 @@ public class NetworkConnection : NetworkManager {
 
 	}
 
-	public void StartHost () {
-
-		m_IsHost = true;
+	public new void StartHost () {
 
 		SetPort ( PORT );
 		m_Client = NetworkManager.singleton.StartHost ();

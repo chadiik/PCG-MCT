@@ -4,4 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/chadiik/topics/Director/Talk.unity
+    guid: e8a5ccd100f6b5947a4c3abc78a4405d
+  - enabled: 1
+    path: Assets/chadiik/topics/Director/Scenes/SceneD_Intro.unity
+    guid: 48a962f21ce41af48b2d144f210c4fcc
+  - enabled: 1
+    path: Assets/chadiik/topics/Scene1ParticleVine/SceneD_ParticleBoids.unity
+    guid: 6e6b3f399f0ae3a45a0c10253b11ee5e
+  - enabled: 0
+    path: Assets/chadiik/firenet/SceneFireCam.unity
+    guid: 32e53be6e4b997843a0c752536199185
+  m_configObjects: {}

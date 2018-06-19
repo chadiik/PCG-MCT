@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 259e6c97bc67bf9468217ea378816764, type: 3}
   m_Name: FishSchool1
   m_EditorClassIdentifier: 
-  separationWeight: 0.7
+  separationWeight: 0.5
   alignmentWeight: 0.4
   cohesionWeight: 0.2
   headToOriginWeight: 1

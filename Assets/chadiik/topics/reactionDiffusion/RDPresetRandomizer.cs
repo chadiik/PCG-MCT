@@ -70,10 +70,9 @@ public class RDPresetRandomizer : ScriptableObject {
 
 	public float Lerp ( string property, float t ) {
 
-		Type targetType = typeof ( RDPreset );
 		Type ownType = typeof ( RDPresetRandomizer );
 
-		System.Reflection.FieldInfo targetField = targetType.GetField ( property );
+		//System.Reflection.FieldInfo targetField = targetType.GetField ( property );
 		System.Reflection.FieldInfo ownField = ownType.GetField ( property );
 
 		RG range = ( RG )ownField.GetValue ( this );
@@ -84,10 +83,8 @@ public class RDPresetRandomizer : ScriptableObject {
 
 	public float Unlerp ( string property, float t ) {
 
-		Type targetType = typeof ( RDPreset );
 		Type ownType = typeof ( RDPresetRandomizer );
 
-		System.Reflection.FieldInfo targetField = targetType.GetField ( property );
 		System.Reflection.FieldInfo ownField = ownType.GetField ( property );
 
 		RG range = ( RG )ownField.GetValue ( this );

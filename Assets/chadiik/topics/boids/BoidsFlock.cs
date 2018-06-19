@@ -79,6 +79,8 @@ namespace pcg {
 
 		private void ApplyPreset ( FlockPreset preset ) {
 
+			this.preset = preset;
+
 			separationWeight = preset.separationWeight;
 			alignmentWeight = preset.alignmentWeight;
 			cohesionWeight = preset.cohesionWeight;
@@ -146,6 +148,8 @@ namespace pcg {
 
 			ApplyPreset ( targetPreset );
 
+			yield return null;
+
 		}
 
 		public void CreateBoidsOverDuration( Pattern pattern, float duration ) {
@@ -163,10 +167,13 @@ namespace pcg {
 
 			}
 
+			yield return null;
+
 		}
 
 		private void CreatePreset () {
 
+#if UNITY_EDITOR
 			FlockPreset newPreset = ScriptableObject.CreateInstance<FlockPreset>();
 
 			newPreset.separationWeight = separationWeight;
@@ -184,8 +191,35 @@ namespace pcg {
 
 			string newName = string.IsNullOrEmpty( newPresetName ) ? "Flock" + DateTime.Now.Ticks : newPresetName;
 			AssetDatabase.CreateAsset ( newPreset, path + "/" + newName + ".asset" );
-
+#endif
 		}
 
+		public IEnumerator RandomOriginFromBoidsCoroutine ( float updateInterval = 1f ) {
+
+			Collider[] neighbours = new Collider[5];
+
+			while ( true ) {
+
+				int numNeighbours = Physics.OverlapSphereNonAlloc ( originTarget.position, nearRadius * .5f, neighbours, agentsLayer );
+
+				if(numNeighbours > 0 ) {
+
+					int nextTarget = Rand.Instance.Int ( 0, numNeighbours - 1 );
+					originTarget.position = neighbours [ nextTarget ].transform.position;
+
+				}
+				else {
+
+					yield return new WaitForSeconds ( updateInterval );
+
+					int nextTarget = Rand.Instance.Int ( 0, boids.Count - 1 );
+					originTarget.position = boids [ nextTarget ].transform.position;
+
+				}
+
+				yield return new WaitForSeconds ( updateInterval );
+			}
+
+		}
 	}
 }

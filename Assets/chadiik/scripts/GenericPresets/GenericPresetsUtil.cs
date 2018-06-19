@@ -35,10 +35,16 @@ public class GenericPresetsUtil : MonoBehaviour {
 
 		if(preset != null ) {
 
-			if ( target is MaterialExplorer )
-				preset.ApplyMaterial ( ( ( MaterialExplorer ) target ).material );
-			else
+			if ( target is MaterialExplorer ) {
+				MaterialExplorer matTarget = ( MaterialExplorer ) target;
+				if (matTarget.properties == null || matTarget.properties.Count != preset.properties.Count ) {
+					matTarget.FromPreset ( preset );
+				}
+				preset.ApplyMaterial ( matTarget.material );
+			}
+			else {
 				preset.Apply ( target );
+			}
 
 			preset = null;
 
@@ -81,9 +87,9 @@ public class GenericPresetsUtil : MonoBehaviour {
 
 	}
 
-	private string[] GetPropertyNames () {
+	public static string[] GetPropertyNames ( string source ) {
 
-		string[] properties = propertiesCSV.Split(new[] {','});
+		string[] properties = source.Split(new[] {','});
 		for ( int i = 0, numProperties = properties.Length; i < numProperties; i++ ) {
 			properties [ i ] = properties [ i ].Trim ();
 		}
@@ -94,9 +100,10 @@ public class GenericPresetsUtil : MonoBehaviour {
 
 	private void CreatePreset () {
 
+#if UNITY_EDITOR
 		GenericPreset newPreset = target is MaterialExplorer ?
 			GenericPreset.Create ( ((MaterialExplorer) target).properties ) :
-			GenericPreset.Create ( target, GetPropertyNames () );
+			GenericPreset.Create ( target, GetPropertyNames ( propertiesCSV ) );
 
 		string path = presetsPath + "/Presets";
 		if ( !AssetDatabase.IsValidFolder ( path ) )
@@ -110,6 +117,7 @@ public class GenericPresetsUtil : MonoBehaviour {
 			fullPath = path + "/" + newName + "_" + DateTime.Now.Ticks + ".asset";
 
 		AssetDatabase.CreateAsset ( newPreset, fullPath );
+#endif
 
 	}
 
@@ -117,7 +125,7 @@ public class GenericPresetsUtil : MonoBehaviour {
 
 		GenericPreset origin = null;
 		if( originData == null && target is MaterialExplorer )
-			origin = GenericPreset.Create ( ( ( MaterialExplorer ) target ).Explore () );
+			origin = GenericPreset.Create ( ( ( MaterialExplorer ) target ).Explore ( goal ) );
 
 		if ( originData is string [] )
 			GenericPreset.Create ( target, originData as string [] );
@@ -130,6 +138,8 @@ public class GenericPresetsUtil : MonoBehaviour {
 		float t = 0f;
 
 		while ( t < 1f ) {
+
+			//Debug.LogFormat ( "Transition generic preset {0}", t );
 
 			GenericPreset.Lerp ( origin, goal, t, store );
 			t = ( Time.time - startTime ) / duration;

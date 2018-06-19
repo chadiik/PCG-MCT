@@ -45,9 +45,6 @@ public class Scene_Attractors : MonoBehaviour {
 
 	private IEnumerator ScenarioExecution () {
 
-		Vector3 newParticleDirection;
-		float time, t;
-
 		switch ( step ) {
 
 			case Step.ConvertMainToAttractor: {
