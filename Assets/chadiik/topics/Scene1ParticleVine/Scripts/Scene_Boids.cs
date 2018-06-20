@@ -9,7 +9,7 @@ public class Scene_Boids : MonoBehaviour {
 
 	public static Scene_Boids instance;
 
-	public enum Step { Idle, Attraction, AttractionUpDown, SettleCohesion, School2, Birds };
+	public enum Step { Idle, Attraction, AttractionUpDown, SettleCohesion, School2, Birds, Exit };
 	public enum Parallel { Idle, LerpToSeparation };
 
 	public Step step;
@@ -206,6 +206,11 @@ public class Scene_Boids : MonoBehaviour {
 					StartCoroutine ( transitionBkg );
 
 					step = Step.Idle;
+					break;
+				}
+
+			case Step.Exit: {
+					Director.Instance.LoadNextScene ();
 					break;
 				}
 		}
